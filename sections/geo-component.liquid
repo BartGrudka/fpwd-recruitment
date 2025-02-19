@@ -1,0 +1,54 @@
+{% unless request.design_mode %}
+  <!-- GeoDialog Component -->
+  <geo-dialog id="welcome-modal" data-redirection-type="{{ section.settings.redirection_or_currency }}"></geo-dialog>
+{% endunless %}
+{% schema %}
+{
+  "name": "GEO Component",
+  "settings": [
+    {
+      "type": "header",
+      "content": "🔻 Example Component Settings"
+    },
+    {
+      "type": "select",
+      "id": "redirection_or_currency",
+      "label": "Redirection Type",
+      "default": "currency_selection",
+      "options": [
+        { "value": "currency_selection", "label": "Currency Selection" },
+        { "value": "subdomain_redirection", "label": "Subdomain Redirection" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Subdomain Redirection Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "subdomain_mapping",
+      "label": "Mapping of Locations to Subdomains",
+      "placeholder": "Enter mappings in the format:\n\nIE:ie.example.com\nGB:uk.example.com\nPL:pl.example.com",
+      "info": "Format: CountryCode:URL. One entry per line."
+    },
+    {
+      "type": "header",
+      "content": "Currency Switching Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "currency_mapping",
+      "label": "Mapping of Locations to Currencies",
+      "placeholder": "Enter mappings in the format:\n\nIE:EUR\nGB:GBP\nPL:PLN",
+      "info": "Format: CountryCode:Currency. One entry per line."
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "GEO Component",
+      "category": "Text"
+    }
+  ]
+}
+{% endschema %}
