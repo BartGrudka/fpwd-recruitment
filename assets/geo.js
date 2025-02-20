@@ -98,7 +98,7 @@ class GeoDialog extends HTMLElement {
     return (0)
       .toLocaleString(code === 'PLN' ? 'pl-PL' : 'en-GB', { style: 'currency', currency: code })
       .replace(/\d|[,. ]/g, '')
-      .replace(' ', '');
+      .trim();
   }
 
   updateOptions() {
@@ -134,7 +134,7 @@ class GeoDialog extends HTMLElement {
 
     requestAnimationFrame(() => {
       this.countryName.forEach((element) => (element.textContent = this.regions.of(code)));
-      this.currency.textContent = `${currencyCode} ${this.getCurrencySymbol(currencyCode)}`;
+      this.currency.textContent = `${currencyCode} - ${this.getCurrencySymbol(currencyCode)}`;
       this.select.value = code;
       this.selectDefaultOption = code;
       this.updateOptions();
