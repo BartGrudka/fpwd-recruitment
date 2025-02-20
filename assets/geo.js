@@ -52,7 +52,15 @@ class GeoDialog extends HTMLElement {
 
   open() {
     const openModal = (countryCode) => {
-      this.updateCountry(countryCode || 'PL');
+      const option = this.select.querySelector(`option[value="${countryCode}"]`);
+
+      if (!option) {
+        const firstOption = this.select.querySelector('option').value;
+        this.updateCountry(firstOption);
+      } else {
+        this.updateCountry(countryCode);
+      }
+
       this.classList.add('active');
       this.modal.setAttribute('aria-hidden', false);
 
@@ -108,8 +116,9 @@ class GeoDialog extends HTMLElement {
   updateCountry(code) {
     const flagSrc = `https://cdn.shopify.com/static/images/flags/${code.toLowerCase()}.svg`;
     this.flag.src = flagSrc;
-    this.selectFlag.src = flagSrc;
     this.flag.style.opacity = '1';
+
+    this.selectFlag.src = flagSrc;
 
     requestAnimationFrame(() => {
       this.countryName.forEach((element) => (element.textContent = this.regions.of(code)));
