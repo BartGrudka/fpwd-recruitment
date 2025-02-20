@@ -94,16 +94,19 @@ class GeoDialog extends HTMLElement {
     this.selectFlag.src = `https://cdn.shopify.com/static/images/flags/${option.value.toLowerCase()}.svg`;
   }
 
+  getCurrencySymbol(code) {
+    return (0)
+      .toLocaleString(code === 'PLN' ? 'pl-PL' : 'en-GB', { style: 'currency', currency: code })
+      .replace(/\d|[,. ]/g, '');
+  }
+
   updateOptions() {
     const options = Array.from(this.select.options);
-
-    const getSymbol = (c) =>
-      (0).toLocaleString(c === 'PLN' ? 'pl-PL' : 'en-GB', { style: 'currency', currency: c }).replace(/\d|[,. ]/g, '');
 
     const fragment = document.createDocumentFragment();
     options.forEach((option) => {
       const newOption = option.cloneNode(true);
-      newOption.innerHTML = `${this.regions.of(option.value)} (${newOption.dataset.currency} - ${getSymbol(
+      newOption.innerHTML = `${this.regions.of(option.value)} (${newOption.dataset.currency} - ${this.getCurrencySymbol(
         newOption.dataset.currency
       )})`;
       fragment.appendChild(newOption);
@@ -126,9 +129,11 @@ class GeoDialog extends HTMLElement {
 
     this.selectFlag.src = flagSrc;
 
+    const currencyCode = window.geo.currencies[code];
+
     requestAnimationFrame(() => {
       this.countryName.forEach((element) => (element.textContent = this.regions.of(code)));
-      this.currency.textContent = window.geo.currencies[code];
+      this.currency.textContent = `${currencyCode} - ${this.getCurrencySymbol(currencyCode)}`;
       this.select.value = code;
       this.selectDefaultOption = code;
       this.updateOptions();
