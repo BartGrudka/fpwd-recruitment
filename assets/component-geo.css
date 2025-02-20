@@ -132,7 +132,7 @@
   border-radius: 8px;
   outline: none;
   margin: 20px 0;
-  text-indent: 27px;
+  text-indent: 30px;
   -webkit-appearance: initial;
 }
 #modal--geo .geo-select-wrapper select:hover {

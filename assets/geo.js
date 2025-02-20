@@ -97,7 +97,8 @@ class GeoDialog extends HTMLElement {
   getCurrencySymbol(code) {
     return (0)
       .toLocaleString(code === 'PLN' ? 'pl-PL' : 'en-GB', { style: 'currency', currency: code })
-      .replace(/\d|[,. ]/g, '');
+      .replace(/\d|[,. ]/g, '')
+      .replace(' ', '');
   }
 
   updateOptions() {
