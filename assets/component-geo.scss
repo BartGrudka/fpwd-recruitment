@@ -147,13 +147,16 @@
 
         select {
           width: 100%;
-          padding: 15px 0 15px 27px;
+          padding: 15px 0;
           border: 2px solid rgba(0, 0, 0, 0.1);
           cursor: pointer;
           transition: background-color 0.2s ease;
           border-radius: 8px;
           outline: none;
           margin: 20px 0;
+
+          text-indent: 27px;
+          line-height: 30px;
 
           &:hover {
             border: 2px solid rgba(0, 0, 0, 0.2);

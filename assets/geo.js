@@ -115,8 +115,14 @@ class GeoDialog extends HTMLElement {
 
   updateCountry(code) {
     const flagSrc = `https://cdn.shopify.com/static/images/flags/${code.toLowerCase()}.svg`;
-    this.flag.src = flagSrc;
-    this.flag.style.opacity = '1';
+
+    const img = new Image();
+    img.src = flagSrc;
+
+    img.onload = () => {
+      this.flag.src = flagSrc;
+      this.flag.style.opacity = '1';
+    };
 
     this.selectFlag.src = flagSrc;
 
