@@ -133,7 +133,7 @@
   outline: none;
   margin: 20px 0;
   text-indent: 27px;
-  line-height: 30px;
+  -webkit-appearance: initial;
 }
 #modal--geo .geo-select-wrapper select:hover {
   border: 2px solid rgba(0, 0, 0, 0.2);
