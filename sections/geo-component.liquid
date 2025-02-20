@@ -1,7 +1,11 @@
+{{ 'component-geo.css' | asset_url | stylesheet_tag }}
+
 {% unless request.design_mode %}
-  <!-- GeoDialog Component -->
-  <geo-dialog id="welcome-modal" data-redirection-type="{{ section.settings.redirection_or_currency }}"></geo-dialog>
+  <geo-dialog id="welcome-modal" data-redirection-type="{{ section.settings.redirection_or_currency }}">
+    {% render 'geo-form' %}
+  </geo-dialog>
 {% endunless %}
+
 {% schema %}
 {
   "name": "GEO Component",
@@ -43,12 +47,15 @@
       "info": "Format: CountryCode:Currency. One entry per line."
     }
   ],
-
   "presets": [
     {
       "name": "GEO Component",
       "category": "Text"
     }
-  ]
+  ],
+  "enabled_on": {
+    "templates": ["*"],
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

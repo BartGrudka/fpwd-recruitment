@@ -1,0 +1,161 @@
+<div class="backdrop" aria-hidden="true"></div>
+
+<localization-form>
+  {% assign currencies = section.settings.currency_mapping
+    | default: ''
+    | strip
+    | newline_to_br
+    | strip_newlines
+    | split: '<br />'
+  %}
+
+  {%- capture currencies_json -%}
+    {
+    {%- for currency in currencies -%}
+      {%- assign currency_split = currency | split: ':' -%}
+
+      {% if forloop.first %}
+        {% assign default_currency = currency_split | last %}
+      {% endif %}
+
+      "{{ currency_split | first }}":"{{ currency_split | last }}"{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+    }
+  {%- endcapture -%}
+
+  {% assign currencies_json = currencies_json | strip_newlines %}
+
+  {% assign subdomains = section.settings.subdomain_mapping
+    | default: ''
+    | strip
+    | newline_to_br
+    | strip_newlines
+    | split: '<br />'
+  %}
+
+  {% capture options %}
+    {% for subdomain in subdomains %} 
+        {% assign code = subdomain | split: ':' | first %}
+        {% assign url = subdomain | split: ':' | last %}
+
+        {% if forloop.first %}
+          {% assign default_country = code %}
+        {% endif %}
+
+        {%- for currency in currencies -%}
+          {%- assign currency_split = currency | split: ':' -%}
+          {%- assign currency_code = currency_split | first -%}
+
+          {% if currency_code == code %}
+            {% assign currency = currency_split | last %}
+          {% endif %}
+        {% endfor %}
+
+        <option value="{{ code }}" data-url="{{ url }}" data-currency="{{ currency }}">{{ code }} - {{ currency }}</option>
+    {% endfor %}
+  {% endcapture %}
+
+  {%- capture subdomains_json -%}
+    {
+      {%- for subdomain in subdomains -%}
+        {%- assign code = subdomain | split: ':' | first -%}
+        "{{ code }}":"{{ subdomain | split: ':' | last }}"{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    }
+  {%- endcapture -%}
+
+  {%- capture geo_options -%}
+    {
+      "default_country": "{{ default_country }}",
+      "default_currency": "{{ default_currency }}",
+      "currencies": {{ currencies_json }},
+      "subdomains": {{ subdomains_json }}
+    }
+  {%- endcapture -%}
+
+  {% case section.settings.redirection_or_currency %}
+    {% when 'subdomain_redirection' %}
+      {% assign mode = 'redirect' %}
+      {% assign change_text = 'country/region' %}
+    {% when 'currency_selection' %}
+      {% assign mode = 'currency' %}
+      {% assign change_text = 'currency' %}
+  {% endcase %}
+
+  <script>
+    window.geo = {{ geo_options }};
+  </script>
+
+  <div id="modal--geo" role="dialog" aria-modal="true" aria-labelledby="geo-title" aria-describedby="geo-description" aria-hidden="true">
+
+    <form data-mode="{{ mode }}">
+      <button class="button-close" type="button" aria-label="Close location selection modal">
+        <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+        <svg
+          class="icon icon--close"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="geo-info active" id="geo-description">
+        <img
+          class="geo-flag"
+          src="https://cdn.shopify.com/static/images/flags/{{ default_country | downcase }}.svg"
+          alt="Country Flag"
+          width="75"
+          height="56"
+          loading="lazy"
+        >
+
+        <h2 class="geo-country-name">
+          Your location is set to <span>{{ default_country }}</span>
+        </h2>
+
+        <hr class="geo-divider">
+
+        <ul>
+          <li class="geo-currency">
+            Shop in <span>{{ default_currency }}</span>
+          </li>
+          <li class="geo-country-name">
+            Get shipping options for <span>{{ default_country }}</span>
+          </li>
+        </ul>
+
+        <button type="submit" class="button-submit" aria-label="Save location selection">Continue</button>
+        <button type="button" class="button-switch" aria-label="Change {{ change_text }} selection">
+          Change {{ change_text }}
+        </button>
+      </div>
+
+      <div class="geo-select">
+        <label for="geo-select" id="geo-select-label">Select {{ change_text }}</label>
+
+        <div class="geo-select-wrapper">
+          <img
+            class="geo-select-flag"
+            src="https://cdn.shopify.com/static/images/flags/{{ default_country | downcase }}.svg"
+            alt="Country Flag"
+            width="25"
+            height="15"
+            loading="lazy"
+          >
+
+          <select id="geo-select" aria-labelledby="geo-select-label">
+            {{ options }}
+          </select>
+        </div>
+
+        <button type="submit" class="button-submit" aria-label="Save location selection">Continue</button>
+        <button type="button" class="button-switch" aria-label="Cancel location selection">Cancel</button>
+      </div>
+    </form>
+  </div>
+</localization-form>
