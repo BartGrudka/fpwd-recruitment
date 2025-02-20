@@ -133,7 +133,7 @@ class GeoDialog extends HTMLElement {
 
     requestAnimationFrame(() => {
       this.countryName.forEach((element) => (element.textContent = this.regions.of(code)));
-      this.currency.textContent = `${currencyCode} - ${this.getCurrencySymbol(currencyCode)}`;
+      this.currency.textContent = `${currencyCode} ${this.getCurrencySymbol(currencyCode)}`;
       this.select.value = code;
       this.selectDefaultOption = code;
       this.updateOptions();
