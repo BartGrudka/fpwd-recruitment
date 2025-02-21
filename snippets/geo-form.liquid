@@ -129,7 +129,10 @@
           </li>
         </ul>
 
-        <button type="submit" class="button-submit" aria-label="Save location selection">Continue</button>
+        <button type="submit" class="button-submit" aria-label="Save location selection">
+          <span>Continue</span>
+          <div class="loader"></div>
+        </button>
         <button type="button" class="button-switch" aria-label="Change {{ change_text }} selection">
           Change {{ change_text }}
         </button>
@@ -148,12 +151,19 @@
             loading="lazy"
           >
 
-          <select id="geo-select" aria-labelledby="geo-select-label">
+          <select id="geo-select" aria-labelledby="geo-select-label" name="country_code">
             {{ options }}
           </select>
+
+          <input type="hidden" name="form_type" value="localization">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="_method" value="put">
         </div>
 
-        <button type="submit" class="button-submit" aria-label="Save location selection">Continue</button>
+        <button type="submit" class="button-submit" aria-label="Save location selection">
+          <span>Continue</span>
+          <div class="loader"></div>
+        </button>
         <button type="button" class="button-switch" aria-label="Cancel location selection">Cancel</button>
       </div>
     </form>

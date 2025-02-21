@@ -92,6 +92,27 @@
     text-align: left;
     padding: 0;
   }
+
+  .loader {
+    display: none;
+    width: 21px;
+    margin:auto;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 3px solid;
+    border-color: #fff transparent;
+    animation: l1 1s infinite;
+  }
+
+  .loading .loader {
+    display: block;
+  }
+
+  .loading span {
+    display: none;
+  }
+
+  @keyframes l1 {to{transform: rotate(.5turn)}}
 }
 
 #modal--geo {

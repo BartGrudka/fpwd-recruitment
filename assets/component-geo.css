@@ -83,6 +83,27 @@
   text-align: left;
   padding: 0;
 }
+#welcome-modal .loader {
+  display: none;
+  width: 21px;
+  margin: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 3px solid;
+  border-color: #fff transparent;
+  animation: l1 1s infinite;
+}
+#welcome-modal .loading .loader {
+  display: block;
+}
+#welcome-modal .loading span {
+  display: none;
+}
+@keyframes l1 {
+  to {
+    transform: rotate(0.5turn);
+  }
+}
 
 #modal--geo {
   max-width: 100vw;

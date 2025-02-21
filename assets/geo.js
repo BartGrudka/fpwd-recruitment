@@ -47,7 +47,7 @@ class GeoDialog extends HTMLElement {
 
   close() {
     this.classList.remove('active');
-    this.modal.setAttribute('aria-hidden', true);
+    this.modal?.setAttribute('aria-hidden', true);
   }
 
   open() {
@@ -105,6 +105,7 @@ class GeoDialog extends HTMLElement {
     const options = Array.from(this.select.options);
 
     const fragment = document.createDocumentFragment();
+
     options.forEach((option) => {
       const newOption = option.cloneNode(true);
       newOption.innerHTML = `${this.regions.of(option.value)} (${newOption.dataset.currency} - ${this.getCurrencySymbol(
@@ -128,16 +129,17 @@ class GeoDialog extends HTMLElement {
       this.flag.style.opacity = '1';
     };
 
-    this.selectFlag.src = flagSrc;
-
     const currencyCode = window.geo.currencies[code];
 
     requestAnimationFrame(() => {
       this.countryName.forEach((element) => (element.textContent = this.regions.of(code)));
       this.currency.textContent = `${currencyCode} - ${this.getCurrencySymbol(currencyCode)}`;
+
+      this.updateOptions();
+
       this.select.value = code;
       this.selectDefaultOption = code;
-      this.updateOptions();
+      this.select.dispatchEvent(new Event('change'));
     });
   }
 
@@ -153,13 +155,31 @@ class GeoDialog extends HTMLElement {
     );
 
     if (this.form.dataset.mode === 'redirect') {
-      //redirect logic goes here
+      const redirectUrl = 'https://' + this.select.options[this.select.selectedIndex].dataset.url;
+      window.location.href = redirectUrl;
     } else {
-      //currency change logic goes here
-    }
+      const formData = new FormData(this.form);
 
-    //just for preview, can be deleted after redirect/currency change logic is implemented
-    this.close();
+      event.submitter.disabled = true;
+      event.submitter.classList.add('loading');
+
+      const activeCurrency = this.select.options[this.select.selectedIndex].dataset.currency;
+
+      if (window.Shopify.currency.active === activeCurrency) {
+        this.close();
+      } else {
+        fetch(window.Shopify.routes.root + 'localization', { method: 'POST', body: formData })
+          .then(() => {
+            window.location.reload();
+          })
+          .catch(() => {
+            event.submitter.disabled = false;
+            event.submitter.classList.remove('loading');
+
+            alert('Something went wrong');
+          });
+      }
+    }
   }
 }
 
